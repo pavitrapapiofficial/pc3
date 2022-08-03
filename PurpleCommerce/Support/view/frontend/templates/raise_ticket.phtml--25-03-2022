@@ -1,0 +1,199 @@
+<?php
+    /** @var \PurpleCommerce\Support\Block\Index $block */
+    $customerdata= $block->getCustomerData();
+    
+    if($customerdata->isLoggedIn()){
+        // echo '<pre>';
+        // print_r($customerdata->getCustomer()->getEmail());
+    }
+    $result = $block->getTableData();
+    // echo '<pre>';
+    // print_r($result);
+    // $data='nitinsharma';
+    // echo $block->encryptData($data).'<br/>';
+    // echo $block->decryptData($data);
+
+?>
+<!-- <div class="tab">
+    
+  <button class="tablinks active" onclick="openCity(event, 'check_status')">View Tickets</button>
+  <button class="tablinks" onclick="openCity(event, 'new')">Raise New Ticket</button>
+</div>
+
+<div id="new" class="tabcontent">
+    <form class='form-horizontal'>
+        <div class='cus-pop-field'>
+            <input type='text' required name='fullname' placeholder='Full Name' />
+        </div>
+        <div class='cus-pop-field'>
+            <input type='email' id='' required name='email' placeholder='Email' />
+        </div>
+        <div class='cus-pop-field'>
+            <input type='text' id='' required name='subject' placeholder='Subject' />
+        </div>
+        <div class='cus-pop-field'>
+            <input type='text' id='' required name='message' placeholder='Query' />
+        </div>
+        <div class='cus-pop-field'>
+            <input type='Submit' name='submit'/>
+        </div>
+    </form>
+</div> -->
+
+<!-- <div id="check_status" class="tabcontent"> -->
+<div class="supporting-list">
+    <div class="supporting-header">
+        <ul>
+            <li class="all-tickets">All Tickets</li>
+            <li class="all-tickets-btn"><a class="support-btn" href="/">Raise New Ticket</a></li>
+        </ul>
+    </div>
+    <div class="supporting-list-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Created on</th>
+                    <th>Ticket Key</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+    <?php 
+        $html='';
+        foreach( $result as $k=>$value){
+            //$html.='<div class="tick-sub"><strong>'.$result[$k]['subject'].'</strong></div>';
+            if($result[$k]['status']==0){
+                $status = '<span style="color:#C31919">Open</span>';
+            }else if($result[$k]['status']==1){
+                $status = '<span style="color:#ea8600">In Process</span>';
+            }else if($result[$k]['status']==2){
+                $status = '<span style="color:#0DA513">Closed</span>';
+            }
+            $html.=' <tr>
+                            <td>'.$result[$k]['created_at'].'</td>
+                            <td>'.$result[$k]['ticket_key'].'</td>
+                            <td>'.$result[$k]['subject'].'</td>
+                            <td>'.$status.'</td>
+                            <td><a class="support-btn" href="'.$block->getbaseurl().'/support/index/view?key='.$block->encryptData($result[$k]['ticket_key']).'">View</a></td>
+                        </tr>
+                        
+                    ';
+        }
+        echo $html;
+    ?>
+    
+            </tbody>
+        </table>
+    </div> 
+</div>
+<!-- </div> -->
+<script>
+        require(
+            [
+                'jquery',
+                'Magento_Ui/js/modal/modal'
+            ],
+            function(
+                $,
+                modal
+            ) {
+                // console.log("here");
+                // alert("ues");
+                // @codingStandardsIgnoreStart
+                var ftitle='test';
+                // @codingStandardsIgnoreEnd
+                var options = {
+                    type: 'popup',
+                    responsive: true,
+                    innerScroll: true,
+                    title: ftitle,
+                    buttons: [{
+                        // text: $.mage.__('Submit'),
+                        // class: 'cus-pop-field cus-pop-btn',
+                        // click: function () {
+                        //     var strid=$(this).attr('data-cid');
+                        //     var id = strid.split("-").pop();
+                           
+                        //     this.closeModal();
+                        // }
+                    }]
+                };
+    
+                // $('#error-m').hide();
+                $('.click-me').on('click',function(){ 
+                    var id=$(this).attr('data-id');
+                    $('#'+id).show();
+                    var popup = modal(options, $('#'+id));
+                    
+                    // alert('gotcha'+id);
+                    $('#'+id).modal('openModal');
+                });
+
+                $('.cus-pop-btn').on('click',function(e){ 
+                    var id=$(this).attr('id');
+                    var id = id.split("-").pop();
+                    $('#form-loader'+id ).show();
+                    //cform/index/index       
+                    var vals=[];
+                    vals.push(
+                        $('#pfullname'+id).val(),
+                        $('#pphone'+id).val(),
+                        $('#pemail'+id).val(),
+                        $('#psub'+id).val(),
+                        $('#pmsg'+id).val(),
+                        $('#cusone'+id).val(),
+                        $('#custwo'+id).val(),
+                        $('#custhree'+id).val(),
+                        $('#cusfour'+id).val()
+                    );
+                    
+                    
+                    if(vals.includes('')){
+                        // alert('if');
+                        $('#error-m'+id).show();
+                    }else{
+                        // alert('else');
+                        $('#error-m'+id).hide();
+                        e.preventDefault();
+                        // console.log(vals);
+                        $.ajax({
+                            type: 'post',
+                            url: '/mgdev/pub/submitenquiry/index/index',
+                            data: $('form').serialize(),
+                            success: function (result) {
+                                $('#form-loader'+id).hide();
+                                $('#click-me-'+id).modal('closeModal');
+                                // $('.pi-success-iiner').html(' <h2>'+result+'</h2>');
+                                // $('.pi-success-message').show();
+                                // $('.workwithus-popup-form').html(result);
+                                // this.closeModal();
+                            }
+                        });
+                    }
+                    
+                });
+
+                $('.cus-pop-clos').on('click',function(e){ 
+                    $(".pi-success-message").hide();
+                });
+                $('#check_status').show();
+                openCity = function(evt, cityName) {
+                    var i, tabcontent, tablinks;
+                    tabcontent = document.getElementsByClassName("tabcontent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(cityName).style.display = "block";
+                    evt.currentTarget.className += " active";
+                }
+    
+            }
+        );
+    </script>
+    

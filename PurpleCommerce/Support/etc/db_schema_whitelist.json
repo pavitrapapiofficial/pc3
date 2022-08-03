@@ -1,0 +1,35 @@
+{
+    "pc_customer_queries": {
+        "column": {
+            "ticket_id": true,
+            "customer_name": true,
+            "email": true,
+            "customer_id": true,
+            "ticket_key": true,
+            "severity": true,
+            "status": true,
+            "subject": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "pc_helpdesk_tickets": {
+        "column": {
+            "entity_id": true,
+            "ticket_id": true,
+            "attachment": true,
+            "severity": true,
+            "status": true,
+            "body": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PC_HELPDESK_TICKETS_TICKET_ID_PC_CUSTOMER_QUERIES_TICKET_ID": true
+        }
+    }
+}

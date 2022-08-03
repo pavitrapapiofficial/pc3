@@ -1,0 +1,214 @@
+<style>
+    
+    </style>
+<?php
+ /** @var \PurpleCommerce\AdvancedWishlist\Block\Index $block */
+// echo 'here';
+$result = $block->getWishlist();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$head='<div class="select"><ul id="pc_head" style="width:150px;">';
+$html='';
+$i=1;
+foreach ($result as $key => $value) {
+    $wid = $result[$key]['wishlist_id'];
+    $wname = $result[$key]['wishlist_name'];
+    $head .= '<li w-id="'.$wid.'" data-value="'.$i.'" class="option pc_wishlist_title">'.$wname.'</li>';
+    
+    $i++;
+    $result2 = $block->getWishlistItemData($wid);
+    foreach ($result2 as $k => $v) {
+        $prodId = $result2[$k]['product_id'];
+        $w_id = $result2[$k]['wishlist_id'];
+        // @codingStandardsIgnoreStart
+        $product = $objectManager->create('Magento\Catalog\Model\Product')->load($prodId);
+        
+        $pimg= $product->getMediaConfig()->getMediaUrl($product->getImage());
+        $url = $product->getProductUrl();
+        $pname = $product->getName();
+        $html .= '<li class="pc_wishlist_prod pc_wishlist_items_'.$w_id.'" style="display:none"><span id="remove-item" wid="'.$wid.'" prod-id="'.$prodId.'"><i class="gg-trash" style="color:red"></i></span><a href="'.$url.'"><img src="'.$pimg.'" width="200px" height="auto">'.$pname.'</a></li>';
+        // @codingStandardsIgnoreEnd
+    }
+   
+}
+
+$head .='</ul></div>';
+
+?>
+<div ul id="pc_head" class="top-wishlist-btns">
+    <?= $head ?>
+    <!-- <div class="select">
+    <ul style="width:150px;">
+        <li data-value="1" class="option">Option 1</li>
+        <li data-value="2" class="option">Option 2</li>
+        <li data-value="3" class="option">Option 3</li>
+    </ul>
+    </div> -->
+<a href="#" class='create_new'>Create wishlist</a>
+<a href="#" class='dlt_wish'>Delete Wishlist</a>
+<a href="#" class='rmn_wish'>Rename Wishlist</a>
+</div>
+<?php
+
+// echo $slct;
+?>
+<ul class="pc_head_items"><?= $html ?></ul>
+<div class="bottom-wishlist-btns">
+<a href="<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/share')?>" 
+class="pc_share" data-cust="<?= $escaper->escapeHtml($block->getCustomerId()) ?>">Share wishlist</a>
+<a href="<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/actions')?>" 
+class="pc_bulk_upload" data-cust="<?= $escaper->escapeHtml($block->getCustomerId()) ?>">Add all item to cart</a>
+</div>
+<div class='curd-div' style='display:none'>
+    <div class='curd-div-inner'>
+        <span class='curd-div-close'>x</span>
+        <div class='type'>
+            
+        </div>
+        <input type='text' class='pc_curd_input' name='curd' value='' placeholder='Enter Widhlist Name'>
+        <input type='submit' name='submit' class='curd' value='Go'>
+    </div>
+</div>
+
+
+
+
+<script>
+    require(['jquery'], function($){
+        
+        $('.select ul li.option').click(function() {
+            // alert('clicked');
+            $(this).siblings().addBack().children().remove();
+            var a = $(this).siblings().toggle();
+            // $(this).parent().prepend(this);
+        })
+        $(window).on('load', function() {
+            // alert('done2');
+            $("ul#pc_head > li:first").trigger("click");
+            $('.select ul li:first').trigger("click");
+        });
+                
+        $(document).on('click','.pc_wishlist_title',function(){
+            var custId = '<?= $escaper->escapeHtml($block->getCustomerId()) ?>';
+            var wid = $(this).attr('w-id');
+            $('.dlt_wish').attr('wishlist-id',wid);
+            $('.rmn_wish').attr('wishlist-id',wid);
+            //---------->$_COOKIE
+            var oldUrl = $('.pc_share').attr("href"); // Get current url
+            var newUrl = oldUrl+'?cid='+custId+'&wid='+wid; // Create new url
+            $('.pc_share').attr("href", newUrl); // Set herf value
+
+            var oldUrl = $('.pc_bulk_upload').attr("href"); // Get current url
+            var newUrl = oldUrl+'?cid='+custId+'&wid='+wid; // Create new url
+            $('.pc_bulk_upload').attr("href", newUrl);
+            //--------->
+            $('.pc_share').attr('wishlist-id',wid);
+            $('.pc_wishlist_prod').hide();
+            $('.pc_wishlist_items_'+wid).show();
+        });
+
+        $(document).on('click','#remove-item', function(){
+            var customurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/curd')?>";
+            var successurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/index')?>";
+            var wid = $(this).attr('wid');
+            var pid = $(this).attr('prod-id');
+            $.ajax({
+                url: customurl,
+                type: 'POST',
+                data: {
+                    wishlistId: wid,
+                    pidId: pid,
+                    type: 'removeitem',
+                },
+                success: function(response) {
+                    console.log('resp'+response);  
+                    // $('.close').trigger('click');
+                    window.location.href = successurl;
+                },
+                error: function (xhr, status, errorThrown) {
+                    console.log('Error happens. Try again.');
+                }
+                
+            });
+        })
+
+        $(document).on('click','.dlt_wish',function(){
+            var customurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/curd')?>";
+            var successurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/index')?>";
+            var custId = '<?= $escaper->escapeHtml($block->getCustomerId()) ?>';
+            var wid=$('.dlt_wish').attr('wishlist-id');
+            $.ajax({
+                url: customurl,
+                type: 'POST',
+                data: {
+                    wishlistId: wid,
+                    customerId: custId,
+                    type: 'dlt',
+                },
+                beforeSend:function(){
+                    return confirm("Current wishlist will be deleted. Are you sure?");
+                },
+                success: function(response) {
+                    console.log('resp'+response);  
+                    // $('.close').trigger('click');
+                    window.location.href = successurl;
+                },
+                error: function (xhr, status, errorThrown) {
+                    console.log('Error happens. Try again.');
+                }
+            });
+        })
+
+        $(document).on('click','.create_new',function(){
+            $('.curd-div').show();
+            $('.type').empty();
+            $('.type').append('<span>Create New wishlist</span>');
+            $('.curd').attr('action-name','createnew');
+        })
+            
+        $(document).on('click','.curd-div-close',function(){
+            $(this).parents('.curd-div').hide();
+            
+        })
+
+
+        $(document).on('click','.rmn_wish',function(){
+            $('.curd-div').show();
+            $('.type').empty();
+            $('.type').append('<span>Rename Current wishlist</span>');
+            $('.curd').attr('action-name','rename');
+        })
+
+        $(document).on('click','.curd', function(){
+            if($('.pc_curd_input').val()!=''){
+                var customurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/curd')?>";
+                var successurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/index')?>";
+                var custId = '<?= $escaper->escapeHtml($block->getCustomerId()) ?>';
+                var tp = $('.curd').attr('action-name');
+                var wid=$('.rmn_wish').attr('wishlist-id');
+                var wname = $('.pc_curd_input').val();
+                $.ajax({
+                    url: customurl,
+                    type: 'POST',
+                    data: {
+                        wishlistId: wid,
+                        customerId: custId,
+                        wishlistname: wname,
+                        type: tp,
+                    },
+                    success: function(response) {
+                        console.log('resp'+response);  
+                        // $('.close').trigger('click');
+                        window.location.href = successurl;
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        console.log('Error happens. Try again.');
+                    }
+                    
+                });
+            }else{
+                alert('Please enter wishlist name');
+            }
+            
+        })
+    });
+</script>

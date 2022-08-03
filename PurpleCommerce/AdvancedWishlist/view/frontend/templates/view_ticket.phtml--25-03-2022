@@ -1,0 +1,27 @@
+<!-- <h1>refresed</h1> -->
+<?php 
+// echo '<pre>';
+// print_r($block->getData('result_by_ticket_id'));
+$history = $block->getData('result_by_ticket_id');
+$html='';
+$head='<div class="supporting-header">
+<ul>
+    <li class="all-tickets">All Tickets</li>
+    <li class="all-tickets-btn"><a class="support-btn" href="/">Raise New Ticket</a></li>
+</ul>
+</div>';
+$i=0;
+foreach ($history as $key => $value) {
+    if ($i==0){
+        $head.='
+        <div class="tic_id">Ticket Id: '.$history[$key]['ticket_key'].'</div>
+        <div class="tic_id">Created On: '.$history[$key]['created_at'].'</div>
+        <div class="tic_id">Subject: '.$history[$key]['subject'].'</div>
+        
+        ';
+    }
+    $i++;
+    $html.='<div>';
+    
+}
+echo $head;

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="pc_customer_queries" resource="default" engine="innodb" comment="Row Data Table">
+    <column xsi:type="int" name="ticket_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Tickets Record Id"/>
+    <column xsi:type="varchar" name="customer_name" nullable="false" length="255" comment="Customer Name"/>
+    <column xsi:type="varchar" name="email" nullable="false" length="112" comment="Email"/>
+    <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="false" comment="Customer Id "/>
+    <column xsi:type="varchar" name="ticket_key" nullable="false" length="255" comment="Ticket Key"/>
+    <column xsi:type="smallint" name="severity" nullable="false" padding="6" unsigned="false" comment="Severity"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="true" identity="false" comment="Status"/>
+    <column xsi:type="text" name="subject" nullable="true" comment="Subject"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" comment="Updated At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="ticket_id"/>
+    </constraint>
+  </table>
+  <table name="pc_helpdesk_tickets" resource="default" engine="innodb" comment="Row Data Table">
+    <column xsi:type="int" name="entity_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Tickets Record Id"/>
+    <column xsi:type="int" name="ticket_id" nullable="false" padding="11" unsigned="false" comment="Ticket Id "/>
+    <column xsi:type="text" name="attachment" nullable="true" comment="Ticket Key"/>
+    <column xsi:type="smallint" name="severity" nullable="false" padding="6" unsigned="false" comment="Severity"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="true" identity="false" comment="Status"/>
+    <column xsi:type="text" name="body" nullable="true" comment="Message"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" comment="Updated At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="entity_id"/>
+    </constraint>
+    <constraint 
+      xsi:type="foreign"
+      table="pc_helpdesk_tickets"
+      column="ticket_id"
+      referenceTable="pc_customer_queries"
+      referenceColumn="ticket_id"
+      onDelete="CASCADE"/>
+  </table>
+</schema>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- <referenceBlock name="category.products.list"> -->
+            <!-- <action method="setTemplate">
+                <argument name="template" xsi:type="string">PurpleCommerce_AdvancedWishlist::catalog/list.phtml</argument>
+                <argument name="cacheable" xsi:type="boolean">false</argument>
+            </action> -->
+        <!-- </referenceBlock> -->
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" cacheable='false' name="custom.block" template="PurpleCommerce_AdvancedWishlist::catalog/popup.phtml" before="-" />
+
+        </referenceContainer>
+        <!-- <referenceBlock name="category.product.addto">
+            <block class="PurpleCommerce\AdvancedWishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist"
+                    name="category.product.addto.wishlist" as="wishlist" before="compare"
+                    template="PurpleCommerce_AdvancedWishlist::catalog/product/list/addto/wishlist.phtml"/>
+        </referenceBlock> -->
+    </body>
+</page>

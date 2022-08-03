@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * PurpleCommerce Attachment List Layout
+ *
+ * @category    PurpleCommerce
+ * @package     PurpleCommerce_Attachment
+ * @author      PurpleCommerce Software Private Limited
+ *
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+                <!-- here we call our ui component of productenquiry-->
+        	<uiComponent name="productenquiry_record_enquiry_list"/>
+        </referenceContainer>
+    </body>
+</page>

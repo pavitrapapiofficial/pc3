@@ -1,0 +1,416 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// phpcs:ignoreFile
+
+use Magento\Framework\App\Action\Action;
+
+// @codingStandardsIgnoreStart
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper');
+?>
+<?php
+    //product enquiry
+    $PIblock= $this->getLayout()->createBlock('\PurpleCommerce\ProductEnquiry\Block\Index');
+        $html = $PIblock->sayHello();
+        // die;
+        
+?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="message info empty">
+        <div><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></div>
+    </div>
+<?php else: ?>
+    <?= $block->getToolbarHtml() ?>
+    <?= $block->getAdditionalHtml() ?>
+    <?php
+    if ($block->getMode() === 'grid') {
+        $viewMode = 'grid';
+        $imageDisplayArea = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    <!-- <h2>overridded</h2> -->
+    <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+        <ol class="products list items product-items">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product): ?>
+            <li class="item product product-item">
+                <div class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                    <?php
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    if ($pos != null) {
+                        $position = 'left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;';
+                    }
+                    ?>
+                    <?php // Product Image ?>
+                    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                       class="product photo product-item-photo"
+                       tabindex="-1">
+                        <?= $productImage->toHtml() ?>
+                    </a>
+                    <div class="product details product-item-details">
+                        <?php $_productNameStripped = $block->stripTags($_product->getName(), null, true); ?>
+                        <strong class="product name product-item-name">
+                            <a class="product-item-link"
+                               href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>">
+                                <?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name')?>
+                            </a>
+                        </strong>
+                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
+                        <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                        <!-- <p>after price</p> -->
+                        <?php
+                        // echo $block->getPopup();
+                            //get product enquiry form
+                            $formtitle='';
+                            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                            $product = $objectManager->create('Magento\Catalog\Model\Product')->load($_product->getId());
+                            $html="<div>
+                                            <a href='#' data-id='click-me-".$_product->getId()."' class='action primary click-me'>".$PIblock->getButtonText()."</a>
+                                            </div>
+                            
+                                            <div id='click-me-".$_product->getId()."' style='display:none;'>
+                                                <div class='workwithus-popup-form'>
+                                                <div class='form-loader' id='form-loader".$_product->getId()."' style='display:none'>
+                                                    <img src='/mgdev/pub/static/frontend/Magento/luma/en_US/images/loader-1.gif'>
+                                                </div>
+                                                
+                                                    <form class='form-horizontal'><div class='cus-pop-field'>
+                                                    <p style='font-size: 13px;opacity: 0.6;'>".$PIblock->getFromDesc()."</p>
+                                                    </div>";
+                        if ($PIblock->showProdData()) {
+                            $objectManager =\Magento\Framework\App\ObjectManager::getInstance();
+                            $helperImport = $objectManager->get('\Magento\Catalog\Helper\Image');
+                            $imageUrl = $helperImport->init($product, 'product_page_image_small')
+                            ->setImageFile($product->getSmallImage()) // image,small_image,thumbnail
+                            ->resize(100)
+                            ->getUrl();
+                            $prodData=[
+                                "name"=>$product->getName(),
+                                "sku"=>$product->getSku(),
+                                "img"=>$imageUrl
+                            ];
+                            // $prodData=$this->getProductData();
+                            $html.="<div class='cus-pop-img'>
+                                                            <img src='".$prodData['img']."'>
+                                                        </div>
+                                                        <div class='cus-pop-para'>
+                                                        <div>
+                                                            Product Name:".$prodData['name']."
+                                                        </div>
+                                                        <div>
+                                                            Product Sku:".$prodData['sku']."
+                                                        </div></div>";
+                        }
+                                            $customfileds='';
+                        if ($PIblock->getCustomOne()!='') {
+                            $customfileds.="<div class='cus-pop-field'>
+                                                                    <input type='text' id='cusone".$_product->getId()."' required name='customone' placeholder='".$PIblock->getCustomOne()."' />
+                                                                </div>";
+                        }
+                        if ($PIblock->getCustomTwo()!='') {
+                            $customfileds.="<div class='cus-pop-field'>
+                                                                    <input type='text' id='custwo".$_product->getId()."' required name='customtwo' placeholder='".$PIblock->getCustomTwo()."' />
+                                                                </div>";
+                        }
+                        if ($PIblock->getCustomThree()!='') {
+                            $customfileds.="<div class='cus-pop-field'>
+                                                                    <input type='text' id='custhree".$_product->getId()."' required name='customthree' placeholder='".$PIblock->getCustomThree()."' />
+                                                                </div>";
+                        }
+                        if ($PIblock->getCustomFour()!='') {
+                            $customfileds.="<div class='cus-pop-field'>
+                                                                    <input type='text' id='cusfour".$_product->getId()."' required name='customfour' placeholder='".$PIblock->getCustomFour()."' />
+                                                                </div>";
+                        }
+                                            $html.="<input type='hidden' name='pname' id='pname".$_product->getId()."' value='".$prodData['name']."'>
+                                                        <input type='hidden' name='psku' id='psku".$_product->getId()."' value='".$prodData['sku']."'>
+                                                        <div class='cus-pop-field'>
+                                                            <input type='text' id='pfullname".$_product->getId()."' required name='fullname' placeholder='Full Name' />
+                                                        </div>
+                                                        <div class='cus-pop-field'>
+                                                            <input type='tel' id='pphone".$_product->getId()."' required name='phone' placeholder='Contact Number' />
+                                                        </div>
+                                                        <div class='cus-pop-field'>
+                                                            <input type='email' id='pemail".$_product->getId()."' required name='email' placeholder='Email' />
+                                                        </div>
+                                                        <div class='cus-pop-field'>
+                                                            <input type='text' id='psub".$_product->getId()."' required name='subject' placeholder='Subject' />
+                                                        </div>
+                                                        <div class='cus-pop-field'>
+                                                            <input type='text' id='pmsg".$_product->getId()."' required name='message' placeholder='Message' />
+                                                        </div>
+                                                       
+                                                       ".$customfileds."
+                                                       <p id='error-m".$_product->getId()."' style='color:red;display:none'>All fields are required.</p>
+                                                    </form>
+                                                    <div class='cus-pop-field'>
+                                                        <button class='cus-pop-field cus-pop-btn' id='final-".$_product->getId()."'>Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            ";
+                                        
+                        if ($PIblock->isModuleEnabled()) {
+                            $formtitle=$PIblock->getFormTitle();
+                            if ($PIblock->isOnListing()) {
+                                   
+                                if ($PIblock->isForAll()) {
+                                    echo $html;
+                                } else {
+                                        
+                                    $categories=$PIblock->visibleCategories();
+                                    $categories = explode(',', $categories);
+                                    // $currentProduct=$block->getCurrentProduct();
+                                    $currentCat=$product->getCategoryIds();
+                                    // echo "here";
+                                    // echo '<pre>';
+                                    // print_r($categories);
+                                    // echo '<pre>';
+                                    // print_r($currentCat);
+                                    $result=array_intersect($categories, $currentCat);
+                                    // echo '<pre>';
+                                    // print_r($result);
+                                    if (count($result)>0) {
+
+                                        echo $html;
+                                    }
+                                }
+                            } else {
+                                $html= '12';
+                            }
+                        } else {
+                            $html= '2';
+                        }
+
+                            //
+                        ?>
+                        <?= $block->getProductDetailsHtml($_product) ?>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()):?>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                        <form data-role="tocart-form"
+                                              data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
+                                              action="<?= $escaper->escapeUrl($postParams['action']) ?>"
+                                              method="post">
+                                            <?php $optionsData = $block->getData('viewModel')->getOptionsData($_product); ?>
+                                            <?php foreach ($optionsData as $optionItem): ?>
+                                                <input type="hidden"
+                                                       name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
+                                                       value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+                                            <?php endforeach; ?>
+                                            <input type="hidden"
+                                                   name="product"
+                                                   value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
+                                            <input type="hidden"
+                                                   name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
+                                                   value="<?=
+                                                   /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
+                                                    ?>">
+                                            <?= $block->getBlockHtml('formkey') ?>
+                                            <button type="submit"
+                                                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                    class="action tocart primary"
+                                                    disabled>
+                                                <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                            </button>
+                                        </form>
+                                    <?php else:?>
+                                        <?php if ($_product->isAvailable()):?>
+                                            <div class="stock available">
+                                                <span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else:?>
+                                            <div class="stock unavailable">
+                                                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                                <?= strpos($pos, $viewMode . '-primary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                    ) : '' ?>
+                                <div data-role="add-to-links" class="actions-secondary">
+                                    <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
+                                        <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                    <?php endif; ?>
+                                </div>
+                                <?= strpos($pos, $viewMode . '-secondary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                    ) : '' ?>
+                            </div>
+                            <?php if ($showDescription): ?>
+                                <div class="product description product-item-description">
+                                    <?= /* @noEscape */ $_helper->productAttribute(
+                                        $_product,
+                                        $_product->getShortDescription(),
+                                        'short_description'
+                                    ) ?>
+                                    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                                       title="<?= /* @noEscape */ $_productNameStripped ?>"
+                                       class="action more"><?= $escaper->escapeHtml(__('Learn More')) ?></a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?= strpos($pos, $viewMode . '-actions') ?
+                /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    $position,
+                    'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                ) : '' ?>
+            </li>
+            <?php endforeach; ?>
+        </ol>
+        
+        <div class='pi-success-message' style='display:none'>
+            <div class="pi-success-message-main">
+                <a class="cus-pop-clos">X</a>
+                <div class="pi-success-iiner">
+           </div>
+           </div> 
+        </div>
+        
+</div>
+    </div>
+    <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
+    <script type="text/x-magento-init">
+    {
+        "[data-role=tocart-form], .form.map.checkout": {
+            "catalogAddToCart": {
+                "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
+            }
+        }
+    }
+    </script>
+<?php endif;// @codingStandardsIgnoreEnd ?>
+
+<script>
+        require(
+            [
+                'jquery',
+                'Magento_Ui/js/modal/modal'
+            ],
+            function(
+                $,
+                modal
+            ) {
+                // console.log("here");
+                // alert("ues");
+                // @codingStandardsIgnoreStart
+                var ftitle='<?php echo $formtitle;?>';
+                // @codingStandardsIgnoreEnd
+                var options = {
+                    type: 'popup',
+                    responsive: true,
+                    innerScroll: true,
+                    title: ftitle,
+                    modalClass: 'pc-listing-modal',
+                    buttons: [{
+                        // text: $.mage.__('Submit'),
+                        // class: 'cus-pop-field cus-pop-btn',
+                        // click: function () {
+                        //     var strid=$(this).attr('data-cid');
+                        //     var id = strid.split("-").pop();
+                           
+                        //     this.closeModal();
+                        // }
+                    }]
+                };
+    
+                // $('#error-m').hide();
+                $('.click-me').on('click',function(){ 
+                    var id=$(this).attr('data-id');
+                    $('#'+id).show();
+                    var popup = modal(options, $('#'+id));
+                    
+                    // alert('gotcha'+id);
+                    $('#'+id).modal('openModal');
+                });
+
+                $('.cus-pop-btn').on('click',function(e){ 
+                    var id=$(this).attr('id');
+                    var id = id.split("-").pop();
+                    $('#form-loader'+id ).show();
+                    //cform/index/index       
+                    var vals=[];
+                    vals.push(
+                        $('#pfullname'+id).val(),
+                        $('#pphone'+id).val(),
+                        $('#pemail'+id).val(),
+                        $('#psub'+id).val(),
+                        $('#pmsg'+id).val(),
+                        $('#cusone'+id).val(),
+                        $('#custwo'+id).val(),
+                        $('#custhree'+id).val(),
+                        $('#cusfour'+id).val()
+                    );
+                    
+                    
+                    if(vals.includes('')){
+                        // alert('if');
+                        $('#error-m'+id).show();
+                    }else{
+                        // alert('else');
+                        $('#error-m'+id).hide();
+                        e.preventDefault();
+                        // console.log(vals);
+                        $.ajax({
+                            type: 'post',
+                            url: '/mgdev/pub/submitenquiry/index/index',
+                            data: $('form').serialize(),
+                            success: function (result) {
+                                $('#form-loader'+id).hide();
+                                $('#click-me-'+id).modal('closeModal');
+                                // $('.pi-success-iiner').html(' <h2>'+result+'</h2>');
+                                // $('.pi-success-message').show();
+                                // $('.workwithus-popup-form').html(result);
+                                // this.closeModal();
+                            }
+                        });
+                    }
+                    
+                });
+
+                $('.cus-pop-clos').on('click',function(e){ 
+                    $(".pi-success-message").hide();
+                });
+                
+    
+            }
+        );
+    </script>

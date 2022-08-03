@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="PurpleCommerce\Support\Api\Data\SupportInterface" type="PurpleCommerce\Support\Model\Support" />
+    <preference for="PurpleCommerce\Support\Api\SupportRepositoryInterface" type="PurpleCommerce\Support\Model\SupportRepository" />
+    <virtualType name="PurpleCommerce\Support\Model\ResourceModel\Support\Support\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">pc_customer_queries</argument>
+            <argument name="resourceModel" xsi:type="string">PurpleCommerce\Support\Model\ResourceModel\Support</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="tickets_tickets_list_data_source" xsi:type="string">PurpleCommerce\Support\Model\ResourceModel\Support\Support\Collection</item>
+                
+            </argument>
+        </arguments>
+    </type>
+    <!-- <type name="PurpleCommerce\Support\Ui\Component\Listing\Column\SupportActions">
+        <plugin name="prepare_data_source_after" type="Ibnab\CustomAction\Plugin\Adminhtml\ProductActions"/>
+    </type> -->
+</config>

@@ -1,0 +1,145 @@
+<?php
+// @codingStandardsIgnoreStart
+$blockObj= $block->getLayout()->createBlock('PurpleCommerce\AdvancedWishlist\Block\Index');
+$customer = $blockObj->getCustomerData();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$_product = $this->getProduct();
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+$customerId = $blockObj->getCustomerId();
+// @codingStandardsIgnoreEnd
+?>
+<!-- choose/add gallery -->
+<?php if ($blockObj->canShowBlock() && $isLoggedIn) { ?>
+    <div class="addMultiGallery" style="display: none;">
+    <!-- <h2 style="text-align: center;">Select or Create Wishlist</h2> -->
+        <div class="login_text">
+            <a href="javascript:void(0);" class="close close1">X</a>
+        </div>
+        <div class="innerPagesGallery">
+            <!-- <div style="padding-bottom: 5px">Select Gallery</div> -->
+            <div class="selectGallery">
+                <div class="selectGallery-one">
+                <select id="galleryList">
+                    <option value="null">Choose Wishlist</option>
+                    <?php $wishlists = $blockObj->getWishlistsByCustomer();
+                    foreach ($wishlists as $k => $v) {
+                        ?>
+                            <option value='<?=  $escaper->escapeHtml($v['wishlist_id']) ?>'>
+                                <?=  $escaper->escapeHtml($v['wishlist_name'])?>
+                            </option>
+                            <?php
+                    }
+                    ?>
+                    <option value="create_new" style="color: #3535ff;">Create New Wishlist</option>
+                </select>
+                <div class="like-btn">
+                <input id="savegallery" type="button" value="Add To Gallery">
+                <span>+</span>
+                </div>
+            </div>
+            </div>
+            <div class="selectGallery-two">
+            <div class="selectGallery">
+                <!-- <input id="savegallery" type="button" value="Add To Gallery"> -->
+                <!-- <span>+</span> -->
+            </div>
+            <div style="clear: both"></div>
+            <div style="display: none" id="galeryName">
+                <input placeholder="Gallery Name" type="text" id="newGalleryName">
+            </div>
+            <div id="ShowError"></div>
+        </div>
+        </div>
+    </div>
+    <div class="lb_overlay js_lb_overlay" style="display:none;"></div>
+    <?php } ?>
+    <!--  -->
+
+
+
+
+
+    <script>
+    require(['jquery'],function($){
+        // console.log('here');
+        // alert('gotcha');
+        $('#savegallery').attr('sel-gal','null');
+        $(document).on('click','#advance_wishlist',function(){
+            $("body").addClass("advance_wishlist_popup");
+            var pid = $(this).attr('data-id');
+            // alert('gotcha',pid);
+            $('#savegallery').attr('data-id',pid);
+            $('.lb_overlay').show();
+            $('.addMultiGallery').show();
+        });
+
+        $('#galleryList').on('change', function() {
+            if(this.value == 'create_new'){
+                $('#galeryName').show();
+            }else{
+                $('#galeryName').hide();
+            }
+            $('#savegallery').attr('sel-gal',this.value);
+            
+        });
+
+        $(document).on('click','.close', function() {
+            $('.addMultiGallery').hide();
+            $('.lb_overlay').hide();
+            $('body').removeClass('advance_wishlist_popup');
+        });
+
+        $(document).on('click','#savegallery', function() {
+            var pid=$(this).attr('data-id');
+            var selgal=$(this).attr('sel-gal');
+            // if()
+            var wname;
+            if(selgal=='create_new'){
+                wname=$('#newGalleryName').val();
+                ajaxpost(selgal,wname,pid,'new');
+            }else{
+                if(selgal=='null'){
+                    alert('Please choose a gallery');
+                }else{
+                    wname = selgal;
+                    ajaxpost(selgal,wname,pid,'old');
+                }
+            }
+            
+        });
+
+        function ajaxpost(selgal,wname,pid,type){
+            // alert(selgal + '-' + wname + '--' + pid);
+            if($('#newGalleryName').val()=='' && selgal=='create_new'){
+                alert('Please enter gallery name');
+            }else{
+                $('.addMultiGallery').hide();
+                // @codingStandardsIgnoreStart
+                var customurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/main')?>";
+                var successurl = "<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/index')?>";
+                
+                $.ajax({
+                    url: customurl,
+                    type: 'POST',
+                    data: {
+                        productid: pid,
+                        wishlistname: wname,
+                        customerId: '<?= $escaper->escapeHtml($customerId);?>',
+                        type: type,
+                    },
+                    success: function(response) {
+                        console.log('resp'+response);  
+                        $('.close').trigger('click');
+                        window.location.href = successurl;
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        console.log('Error happens. Try again.');
+                    }
+                });
+                // @codingStandardsIgnoreEnd
+            }
+        }
+    })
+</script>

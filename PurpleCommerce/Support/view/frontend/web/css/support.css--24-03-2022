@@ -1,0 +1,269 @@
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+  }
+  
+  /* Style the buttons inside the tab */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: #ccc;
+  }
+  
+  /* Style the tab content */
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+  }
+
+  .modals-wrapper aside.modal-popup .modal-inner-wrap {
+    max-width: 500px;
+    text-align: center;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .modal-header {
+    padding: 10px 0;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .modal-header h1 {
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-para {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px 0;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-para div:nth-child(1) {
+    flex: 0 0 100%;
+    max-width: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-para div:nth-child(2) {
+    flex: 0 0 100%;
+    max-width: 100%;
+    text-align: center;
+    font-weight: 400;
+    font-size: 14px;
+    padding-left: 0;
+    box-sizing: border-box;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-field {
+    margin: 0 0 10px 0;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-field input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 0;
+  } 
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-field.cus-pop-btn button {
+    background: #1979c3;
+    color: #fff;
+    border: 1px solid #1979c3;
+  
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form .cus-pop-field.cus-pop-btn {
+    background: #1979c3;
+    color: #fff;
+    border: 1px solid #1979c3
+  
+  }
+  body .modals-wrapper aside.modal-popup .modal-inner-wrap .modal-footer {
+    padding: 10px 0;
+    text-align: center;
+    border: none;
+    padding: 0 0 5px 0;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .modal-footer button {
+    /* background: #1979c3;
+    color: #fff;
+    border: 1px solid #1979c3; */
+    display: none !important;
+  }
+  ._keyfocus *:focus, input:not([disabled]):focus, textarea:not([disabled]):focus, select:not([disabled]):focus {
+    box-shadow: unset !important;
+  }
+  body .products-grid .product-item-actions {
+  margin: 0;
+  }
+  body.page-products .columns {
+  width: 79.16666667%;
+    float: right;
+  }
+  body.page-layout-2columns-left .column.main {
+  width: 100%;
+  float: left;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form .cus-pop-field input::placeholder {
+  font-size: 13px;
+  }
+  body .modal-popup._inner-scroll .modal-content {
+      overflow-y: unset;
+      padding: 0;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form form.form-horizontal {
+    overflow-y: scroll;
+      height: 400px;
+      padding-left: 3rem;
+      padding-right: 3rem;
+  }
+  .modals-wrapper aside.modal-popup .modal-inner-wrap .workwithus-popup-form > .cus-pop-field {
+    margin: 5px 0 8px 0;
+      border-top: 1px solid #ccc;
+      padding: 14px 0 0 0;
+  }
+  .product-item .tocart span {
+    font-size: 0;
+  }
+  .product-item .tocart span::after {
+    content: "Buy Now";
+    font-size: 1.3rem;
+  }
+  .form-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999999;
+      background-color: rgba(51,51,51,.55);
+  }
+  .form-loader img {
+    transform: translate(-50%, -50%);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+  }
+  .pi-success-message {
+    position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(51,51,51,.55);
+      z-index: 999;
+  }
+  .pi-success-iiner {
+    /* position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      background: #fff;
+      padding: 20px; */
+  }
+  .cus-pop-clos {
+    float: right;
+      display: inline-block;
+      font-size: 20px;
+      color: #000;
+  }
+  .pi-success-message h2 {
+    font-size: 18px;
+      text-align: center;
+      line-height: normal;
+      margin: 0 auto;
+      max-width: 540px;
+  }
+  
+  .pi-success-message-main {
+    z-index: 1;
+      background: #fff;
+      padding: 15px 20px;
+  }
+  .pi-success-message h2::before {
+    -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 24px;
+      line-height: 24px;
+      color: #006400;
+      content: '\e60e';
+      font-family: 'luma-icons';
+      margin: 0;
+      vertical-align: middle;
+      display: inline-block;
+      font-weight: 400;
+      overflow: hidden;
+      speak: none;
+      left: 0;
+      top: 22px;
+      width: 45px;
+      position: static;
+      text-align: center;
+  }
+
+  body {
+    margin: 0;
+}
+.supporting-list {
+    font-family: arial;
+    padding: 15px;
+}
+.supporting-list table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+.supporting-list table th {
+    font-weight: 600;
+}
+.supporting-list table td, .supporting-list table th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+    color: #707070;
+    font-size: 16px;
+}
+.supporting-list table tr th:nth-child(2), .supporting-list table tr td:nth-child(2) {
+    width: 30%;
+}
+.supporting-header ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.supporting-header ul li {
+    width: 50%;
+    float: left;
+}
+.supporting-header ul li:nth-child(2) {
+    text-align: right;
+} 
+.supporting-header {
+    float: left;
+    width: 100%;
+    margin: 5px 0 30px 0;
+}
+.supporting-list button {
+    background: #1979C3;
+    border: 1px solid #1979C3;
+    color: #fff;
+    font-size: 17px;
+    padding: 5px 20px;
+    box-shadow: -1px 0px 4px rgb(0 0 0 / 50%);
+    cursor: pointer;
+    border-radius: 3px;
+}
+.supporting-list button:hover {
+    text-decoration: underline;
+}

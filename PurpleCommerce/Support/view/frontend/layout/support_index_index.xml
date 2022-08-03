@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"> 
+    <update handle="customer_account"/> 
+    <head>
+        <css src="PurpleCommerce_Support::css/support.css" />
+        <script src="PurpleCommerce_Support::js/support.js"/>
+    </head>
+    <body> 
+        <referenceContainer name="page.messages">
+            <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+        </referenceContainer>
+        <referenceBlock name="page.main.title"> 
+            <action method="setPageTitle"> 
+                <argument translate="true" name="title" xsi:type="string">Support</argument> 
+            </action> 
+        </referenceBlock> 
+        <referenceContainer name="content"> 
+            <block class="PurpleCommerce\Support\Block\Index" name="my_custom_pc_tab" template="PurpleCommerce_Support::raise_ticket.phtml" cacheable='false'> 
+            </block>
+             
+        </referenceContainer> 
+    </body> 
+</page>

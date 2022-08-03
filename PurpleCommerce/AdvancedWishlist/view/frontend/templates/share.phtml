@@ -1,0 +1,20 @@
+<?php
+// @codingStandardsIgnoreStart
+    $customerid = $_GET['cid'];
+    $wid = $_GET['wid'];
+    // @codingStandardsIgnoreEnd
+?>
+<form class="advancedwishlist-form" method='post' 
+action='<?= $escaper->escapeHtml($block->getUrl().'advancedwishlist/index/actions')?>'>
+    <input type="hidden" name='customer_id' value='<?= $escaper->escapeHtml($customerid) ?>'>
+    <input type="hidden" name='wishlist_id' value='<?= $escaper->escapeHtml($wid) ?>'>
+    <div class="advancedwishlist-field">
+        <label>Enter comma separated email ids:</label>
+        <textarea rows="4" cols="50" name='emails' placeholder="Comma seprated email ids"></textarea>
+    </div>
+    <div class="advancedwishlist-field">
+        <label>Enter message:</label>
+        <textarea rows="4" cols="50" name='message' placeholder="Enter Message here..."></textarea>
+    </div>
+    <input type="submit" name="type" value="share"> 
+</form>

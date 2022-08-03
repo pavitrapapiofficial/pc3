@@ -1,0 +1,134 @@
+<?php 
+// echo '<pre>';
+// print_r($block->getData('result_by_ticket_id'));
+$history = $block->getData('history_by_ticket_id');
+$result = $block->getData('result_by_ticket_id');
+$customerdata= $block->getCustomerData();
+$custField ='';
+$customclass='';
+$canReopen = false;
+$forAction=2;
+$label='Close Ticket';
+if($customerdata->isLoggedIn()){
+    // echo '<pre>';
+    $custEmail=$customerdata->getCustomer()->getEmail();
+    $custId=$customerdata->getCustomer()->getId();
+    $custField = '<input type="hidden" name="customer-id" value="'.$custId.'">';
+}
+if($result[0]['status']==0){
+    $status = '<span style="color:#C31919">Open</span>';
+}else if($result[0]['status']==1){
+    $status = '<span style="color:#ea8600">In Process</span>';
+}else if($result[0]['status']==2){
+    $customclass='deactive-form';
+    $canReope=true;
+    $forAction=0;
+    $label = 'Re-Open Ticket';
+    $status = '<span style="color:#0DA513">Closed</span>';
+}
+?>
+<div class="supporting-conversation-main">
+    <div class="supporting-conversation-head">
+        <div class="supporting-conversation-left">
+            <ul>
+                <li>Ticket key: <?= $result[0]['ticket_key'] ?></li>
+                <li>Created on: <?= $result[0]['created_at'] ?></li>
+                <li>Subject: <?= $result[0]['subject'] ?></li>
+            </ul>
+        </div>
+        <div class="supporting-conversation-right">
+            <a href="<?php echo $block->getbaseurl();?>/support/index/index">View All Tickets</a>
+            <form method='post' action='<?php echo $block->getbaseurl();?>/support/index/submit' >
+                <input type="hidden" name="form-type" value="actionform">
+                <input type="hidden" name="ticket_id" value="<?= $result[0]['ticket_id'] ?>">
+                <input type="hidden" name="status" value="<?= $forAction ?>">
+                <input type="hidden" name="customer-id" value="<?= $custId ?>">
+                <input type="submit" name="submit" class="raise_ticket support-btn" value="<?= $label ?>">
+            </form>
+            <div class="supporting-conversation-status">Status: <span><?= $status ?></span></div>
+        </div>
+    </div>
+    <div class="supporting-conversation-content">
+        <div class="supporting-conversation-detail">
+            <?php
+                $filecontainer='';
+                $customerHtml='';
+                $agentHtml='';
+                foreach($history as $k=>$v){
+                    if($history[$k]['responder_id']==0) {
+                        if(!empty($history[$k]['attachment'])){
+                            $filecontainer = '<a href='.$block->getbaseurl().$history[$k]['attachment'].' target="_blank">See attachment</a>';
+                        }
+                        $agentHtml .= '<div class="sender">
+                                            <div class="sender-iner">
+                                                <div class="conversation-info">
+                                                    <span class="messager-name">Agent</span>
+                                                    <span class="messager-time">'.$history[$k]['created_at'].'</span>
+                                                </div>    
+                                                <p>'.$history[$k]['body'].'</p>'.$filecontainer.'
+                                            </div>
+                                        </div>';
+                    } else {
+                        $customerdata = $block->getCustomerDataById($history[$k]['responder_id']);
+                        $customerName = $customerdata->getFirstName();
+                        $email = $customerdata->getEmail();
+                        if(!empty($history[$k]['attachment'])){
+                            $filecontainer = '<a href='.$block->getbaseurl().$history[$k]['attachment'].' target="_blank">See attachment</a>';
+                        }
+                        $agentHtml .= '<div class="reciever">
+                                            <div class="reciever-iner">
+                                                <div class="conversation-info">
+                                                    <span class="messager-name">You</span>
+                                                    <span class="messager-time">'.$history[$k]['created_at'].'</span>
+                                                </div>    
+                                                <p>'.$history[$k]['body'].'</p>'.$filecontainer.'
+                                            </div>
+                                        </div>';
+                    }
+                    $filecontainer ='';
+                }
+                // echo $customerHtml;
+                
+                echo $agentHtml;
+            ?> 
+            <!-- <div class="sender">
+                <div class="sender-iner">
+                    <div class="conversation-info">
+                        <span class="messager-name">Agent</span>
+                        <span class="messager-time">Dd/mm/yyyy 00:00:00</span>
+                    </div>    
+                    <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>
+                </div>
+            </div>
+            <div class="reciever">
+                <div class="reciever-iner">
+                <div class="conversation-info">
+                    <span class="messager-name">You</span>
+                    <span class="messager-time">Dd/mm/yyyy 00:00:00</span>
+                </div>    
+                 <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>
+                </div>
+            </div> -->
+            
+            
+            
+           
+            
+        </div>
+        <div class="supporting-conversation-tools">
+            <form action='<?= $block->getbaseurl().'support/index/submit'?>' enctype="multipart/form-data" method='post' class='<?= $customclass ?>'>
+                <input type="hidden" name="form-type" value="chatbox">
+                <input type="hidden" name="ticket_id" value="<?= $result[0]['ticket_id'] ?>">
+                <input type="hidden" name="status" value="<?= $result[0]['status'] ?>">
+                <input type="hidden" name="sub" value="<?= $result[0]['subject'] ?>">
+                <input type="hidden" name="severity" value="<?= $result[0]['severity'] ?>">
+                <?php echo $custField;?>
+                <textarea name="customer_query" placeholder="Type a message" id="" cols="30" rows="1"></textarea>
+                <div class="supporting-conversation-tools-buttons">
+                    <input type="file" name="attachment" id="">
+                    <input type="submit" name="submit" class="raise_ticket support-btn" value="Send">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

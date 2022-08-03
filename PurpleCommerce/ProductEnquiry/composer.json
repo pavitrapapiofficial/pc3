@@ -1,0 +1,33 @@
+{
+  "name": "purplecommerce/productenquiry",
+  "description": "Magento 2 product enquiry module help you enable enquiry for products. The product page/listing page will allow customers to enquire about the product before making an informed decision",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "keywords": [
+      "magento 2",
+      "magento",
+      "Product Enquiry",
+      "ProductEnquiry",
+      "Magento 2 Product Enquiry Extension",
+      "how to add Product Enquiry in magento 2"
+  ],
+  "type": "magento2-module",
+  "version": "1.0.1",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+      {
+          "name": "Nitin Sharma",
+          "email": "nitin.sharma@purplecommerce.com",
+          "role": "Magento 2 Developer."
+      }
+  ],
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "PurpleCommerce\\ProductEnquiry\\": ""
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<!-- advanced wishlist -->
+<?php
+// @codingStandardsIgnoreStart
+$blockObj= $block->getLayout()->createBlock('PurpleCommerce\AdvancedWishlist\Block\Index');
+$customer = $blockObj->getCustomerData();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$_product = $this->getProduct();
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+
+?>
+<?php if ($blockObj->canShowBlock() && $isLoggedIn) { ?>
+<div class="pc-advance-wishlist">
+    <a href='javascript:void(0)' id='advance_wishlist' data-id='<?= $escaper->escapeHtml($_product->getId()) ?>'>Add to Wishlist</span></a>
+</div>
+<?php } else { ?>
+    <div class="pc-advance-wishlist">
+    <a href='<?php echo $this->getUrl()?>customer/account/login' id='not_logged_in' data-id='<?= $escaper->escapeHtml($_product->getId()) ?>'>Add to Wishlist</span></a>
+</div>
+<?php } // @codingStandardsIgnoreEnd ?>
+<!--  -->

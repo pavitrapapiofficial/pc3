@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="block-product-list" type="PurpleCommerce\AdvancedWishlist\Plugin\ProductList"/>
+    </type>
+    <virtualType name="Magento\CatalogSearch\Block\SearchResult\ListProduct">
+        <plugin name="block-product-list-search" type="PurpleCommerce\AdvancedWishlist\Plugin\ProductList" />
+    </virtualType>
+</config>

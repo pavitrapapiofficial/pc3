@@ -1,0 +1,61 @@
+<?php
+$v= $block->getUrlInterfaceData();
+$variable = substr($v, strpos($v, "ticket_id"));
+$variable2 = substr($variable, 0, strpos($variable, "key"));
+$ticket_id= filter_var($variable2, FILTER_SANITIZE_NUMBER_INT);
+
+$result=$block->getTableDataById($ticket_id);
+$getQueryies=$block->getQueryTableData($ticket_id);
+// echo '<pre>';
+// print_r($getQueryies);
+$addClass='';
+if ($getQueryies[0]['status']==2) {
+    $addClass = 'deactivate-form';
+}
+$customerHtml='';
+$agentHtml='';
+$filecontainer ='';
+
+foreach ($result as $k => $v) {
+    if ($result[$k]['responder_id']==0) {
+        if (!empty($result[$k]['attachment'])) {
+            $filecontainer = '<a href='.$block->getbaseurl().$result[$k]['attachment'].' target="_blank">View File</a>';
+        }
+        $agentHtml .= '<div class="sender">
+                            <div class="sender-iner">
+                                <div class="conversation-info">
+                                    <span class="messager-name">You</span>
+                                    <span class="messager-time">'.$result[$k]['created_at'].'</span>
+                                </div>    
+                                <p>'.$result[$k]['body'].'</p>'.$filecontainer.'
+                            </div>
+                        </div>';
+    } else {
+        $customerdata = $block->getCustomerDataById($result[$k]['responder_id']);
+        $customerName = $customerdata->getFirstName();
+        $email = $customerdata->getEmail();
+        if (!empty($result[$k]['attachment'])) {
+            $filecontainer = '<a href='.$block->getbaseurl().$result[$k]['attachment'].' target="_blank">View File</a>';
+        }
+        $agentHtml .= '<div class="reciever">
+                            <div class="reciever-iner">
+                                <div class="conversation-info">
+                                    <span class="messager-name">'.$customerName.' ('.$email.')</span>
+                                    <span class="messager-time">'.$result[$k]['created_at'].'</span>
+                                </div>    
+                                <p>'.$result[$k]['body'].'</p>'.$filecontainer.'
+                            </div>
+                        </div>';
+    }
+    $filecontainer ='';
+}
+// @codingStandardsIgnoreStart
+echo $block->getCloseTicketBox($ticket_id, $addClass);
+echo '<div class="support-one-column">';
+// echo $customerHtml;
+// echo '<br>';
+echo $agentHtml;
+echo '</div>';
+$getChatbox= $block->getReplyBox($ticket_id, $addClass);
+echo $getChatbox;
+// @codingStandardsIgnoreEnd

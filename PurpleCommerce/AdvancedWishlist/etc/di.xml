@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="PurpleCommerce\AdvancedWishlist\Api\Data\AdvancedWishlistInterface" type="PurpleCommerce\AdvancedWishlist\Model\AdvancedWishlist" />
+    <preference for="PurpleCommerce\AdvancedWishlist\Api\AdvancedWishlistRepositoryInterface" type="PurpleCommerce\AdvancedWishlist\Model\AdvancedWishlistRepository" />
+    <virtualType name="PurpleCommerce\AdvancedWishlist\Model\ResourceModel\AdvancedWishlist\AdvancedWishlist\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">pc_wishlist</argument>
+            <argument name="resourceModel" xsi:type="string">PurpleCommerce\AdvancedWishlist\Model\ResourceModel\AdvancedWishlist</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="tickets_tickets_list_data_source" xsi:type="string">PurpleCommerce\AdvancedWishlist\Model\ResourceModel\AdvancedWishlist\AdvancedWishlist\Collection</item>
+                
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="block-product-list" type="PurpleCommerce\AdvancedWishlist\Plugin\ProductList"/>
+    </type>
+    <virtualType name="Magento\CatalogSearch\Block\SearchResult\ListProduct">
+        <plugin name="block-product-list" type="PurpleCommerce\AdvancedWishlist\Plugin\ProductList" />
+    </virtualType>
+    <!-- <type name="PurpleCommerce\AdvancedWishlist\Ui\Component\Listing\Column\AdvancedWishlistActions">
+        <plugin name="prepare_data_source_after" type="Ibnab\CustomAction\Plugin\Adminhtml\ProductActions"/>
+    </type> -->
+</config>

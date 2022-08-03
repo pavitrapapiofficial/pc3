@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <!-- action="productenquiry/enquiry"  -->
+        <add id="PurpleCommerce_ProductEnquiry::main" title="Product Enquiry" module="PurpleCommerce_ProductEnquiry" sortOrder="100" parent="Magento_Backend::marketing" resource="PurpleCommerce_ProductEnquiry::content"/>
+        <add id="PurpleCommerce_ProductEnquiry::view" title="Enquiry" module="PurpleCommerce_ProductEnquiry" sortOrder="10" parent="PurpleCommerce_ProductEnquiry::main" action="productenquiry/enquiry" resource="PurpleCommerce_ProductEnquiry::view"/>
+    	
+    </menu>
+</config>

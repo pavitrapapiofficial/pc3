@@ -1,0 +1,63 @@
+<?php
+    /** @var \PurpleCommerce\Support\Block\Index $block */
+    $customerdata= $block->getCustomerData();
+    $emailField='';
+    $customerName='';
+    //------>get random ticket key
+        $length=4;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+for ($i = 0; $i < $length; $i++) {
+    $randomString .= strtoupper($characters[rand(0, $charactersLength - 1)]);
+}
+    //------>
+if ($customerdata->isLoggedIn()) {
+    // echo '<pre>';
+    $custEmail=$customerdata->getCustomer()->getEmail();
+    $customerName = $customerdata->getCustomer()->getName();
+    $custId=$customerdata->getCustomer()->getId();
+    $emailField = '<input type="hidden" name="customer-id" value="'.$custId.'">
+    <input type="hidden" name="customer-email" value="'.$custEmail.'">';
+}
+    $result = $block->getTableData();
+    // echo '<pre>';
+    // print_r($result);
+    // $data='nitinsharma';
+    // echo $block->encryptData($data).'<br/>';
+    // echo $block->decryptData($data);
+
+?>
+<div class="raise_new_ticket_container">
+    <h2>Raise New Ticket</h2>
+    <div class="raise_new_ticket_form">
+    <form action="<?= /* @noEscape */ $block->getbaseurl().'support/index/submit'?>" method="post">
+        <input type="hidden" name="form-type" value="newticket">
+        <input type="hidden" name="status" value="0">
+        <input type="hidden" name="customer" value="<?= /* @noEscape */ $customerName ?>">
+        
+        <input type='hidden' name='ticket-key' value='<?= /* @noEscape */ $randomString;?>'>
+        
+        <?= /* @noEscape */ $emailField; ?>
+        <div class="raise_new-form_field">
+            <label for="">Subject:</label>
+            <select name='sub'>
+                <option value='installation'>Installation</option>
+                <option value='technical'>Technical</option>
+                <option value='billing'>Billing</option>
+                <option value='others'>Others</option>
+            </select>
+        </div>
+        <div class="raise_new-form_field">
+            <label for="">Description:</label>
+            <textarea placeholder="Type detailed description abour your query" name="query" required="required"></textarea>
+        </div>
+        <div class="raise_new-form_field raise_new-form_btn">
+            <a href="<?= /* @noEscape */ $block->getbaseurl().'support/index/index'?>" 
+                class="raise_cancel support-btn"  id="show-all">Cancel</a>
+            <input type="submit" name="submit" class="raise_ticket support-btn" value="Raise Ticket">
+            <!-- <a href="javasript:void(0);" class="raise_ticket support-btn">Raise Ticket</a> -->
+        </div>
+    </form>
+    </div>
+</div>

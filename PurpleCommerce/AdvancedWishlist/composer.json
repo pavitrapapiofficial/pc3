@@ -1,0 +1,34 @@
+{
+  "name": "purplecommerce/advancedwishlist",
+  "description": "Purplecommerce wishlist module helps you to create multiple wishlist and add product to particular wishlist. These wishlist are shareable and has various functionality in it.",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "keywords": [
+      "magento 2",
+      "magento",
+      "wishlist",
+      "AdvancedWishlist",
+      "Magento 2 Advanced Wishlist Extension",
+      "Add ticket system in magento 2",
+      "Customer wishlist Magento 2 Extension"
+  ],
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+      {
+          "name": "Nitin Sharma",
+          "email": "nitin.sharma@purplecommerce.com",
+          "role": "Magento 2 Developer."
+      }
+  ],
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "PurpleCommerce\\AdvancedWishlist\\": ""
+    }
+  }
+}

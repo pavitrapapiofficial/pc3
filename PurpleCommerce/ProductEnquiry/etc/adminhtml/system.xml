@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="purplecommerce" translate="label" sortOrder="10">
+            <label>PurpleCommerce</label>
+        </tab>
+        <section id="productenquiry" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>ProductEnquiry</label>
+            <tab>purplecommerce</tab>
+            <resource>PurpleCommerce_ProductEnquiry::productenquiry_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="pe_for_all" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Enquiry for All</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="pe_for_cat" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Select Category</label>
+                    <depends>
+                        <field id="*/*/pe_for_all">0</field>
+                    </depends>
+                    <source_model>PurpleCommerce\ProductEnquiry\Model\Config\Source\ConfigOption</source_model>
+                    <comment>If Product Enquiry for All is No, then any category must be selected.</comment>
+                </field>
+                <field id="pe_on_listing" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show on Listing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="pe_on_detail" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show on Detail Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="pe_button_text" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enquiry Button Text</label>
+                    <comment>This text will display on the frontend.</comment>
+                </field>
+                
+                
+            </group>
+            <group id="formconfig" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Form Configuration</label>
+                <field id="pe_from_title" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Form Title</label>
+                    <comment>This text will be used as title of enquiry form.</comment>
+                </field>
+                <field id="pe_from_des" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Form Description</label>
+                    <comment>This text will be used as description of enquiry form.</comment>
+                </field>
+                <field id="show_prod_data" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show product details in form</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If yes, product image,name and sku will be dispalyed inside form.</comment>
+                
+                </field>
+                <field id="pe_success_msg" translate="label" type="textarea" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Form submit success message</label>
+                    <comment>This text will be shown after successful form submision.</comment>
+                </field>
+                <field id="pe_custom_one" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Custom Field 1</label>
+                    <comment>Enter label for custom filed. This will display as text input on frontend</comment>
+                </field>
+                <field id="pe_custom_two" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Custom Field 2</label>
+                    <comment>Enter name of custom filed. This will display as text input on frontend</comment>
+                </field>
+                <field id="pe_custom_three" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Custom Field 3</label>
+                    <comment>Enter name of custom filed. This will display as text input on frontend</comment>
+                </field>
+                <field id="pe_custom_four" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Custom Field 4</label>
+                    <comment>Enter name of custom filed. This will display as text input on frontend</comment>
+                </field>
+                <field id="pe_email_admin" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Send email to admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- <field id="pe_email_of_admin" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Admin Email</label>
+                    <comment>Enter admin email</comment>
+                </field> -->
+                <field id="pe_email_cc" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>More Recipient</label>
+                    <validate>validate-emails</validate>
+                    <comment>Comma seprated emails</comment>
+                </field>
+                <field id="pe_auto_response" translate="label" type="select" sortOrder="17" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Auto response</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- <field id="pe_autoresp_email" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auto response email sender email</label>
+                    <comment>Will be used to send auto response emails</comment>
+                </field> -->
+                <field id="pe_autoresp_msg" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auto response Message</label>
+                    <comment>This message will be sent to customer.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

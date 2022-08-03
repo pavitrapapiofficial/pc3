@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+         	<title>Trade Catalogue Request</title>
+	</head>
+	<body>
+	    <referenceContainer name="content">
+	        <block class="PurpleCommerce\RequestCatalogue\Block\RequestCatalogue" name="requestcatalogue_index_index" template="PurpleCommerce_RequestCatalogue::requestCatalogueForm.phtml" />
+	    </referenceContainer>
+	</body>
+</page>

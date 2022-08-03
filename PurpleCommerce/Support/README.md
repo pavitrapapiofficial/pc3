@@ -1,0 +1,1 @@
+Purplecommerce helpdesk module adds the ticketing system functionality to your Magento 2 store. Helps you to connect with customers and answers to their queries, if any.

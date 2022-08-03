@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="PurpleCommerce\ProductEnquiry\Api\Data\ProductEnquiryInterface" type="PurpleCommerce\ProductEnquiry\Model\ProductEnquiry" />
+    <preference for="PurpleCommerce\ProductEnquiry\Api\ProductEnquiryRepositoryInterface" type="PurpleCommerce\ProductEnquiry\Model\ProductEnquiryRepository" />
+    <virtualType name="PurpleCommerce\ProductEnquiry\Model\ResourceModel\ProductEnquiry\ProductEnquiry\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">pc_productenquiry_records</argument>
+            <argument name="resourceModel" xsi:type="string">PurpleCommerce\ProductEnquiry\Model\ResourceModel\ProductEnquiry</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="productenquiry_record_enquiry_list_data_source" xsi:type="string">PurpleCommerce\ProductEnquiry\Model\ResourceModel\ProductEnquiry\ProductEnquiry\Collection</item>
+                
+            </argument>
+        </arguments>
+    </type>
+</config>

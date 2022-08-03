@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="PurpleCommerce_Support::support" title="Support" module="PurpleCommerce_Support" sortOrder="11" resource="PurpleCommerce_Support::support"/>
+        <add id="PurpleCommerce_Support::tickets" title="Manage Tickets" module="PurpleCommerce_Support" sortOrder="10" action="tickets/tickets" resource="PurpleCommerce_Support::support" parent="PurpleCommerce_Support::support"/>  
+    </menu>
+</config>
